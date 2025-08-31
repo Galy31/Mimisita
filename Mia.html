@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Historia - Mia y Galy</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #000000 0%, #ff0000 100%);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .book-container {
+            width: 90%;
+            max-width: 800px;
+            height: 80%;
+            max-height: 600px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .book-header {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .page-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .page-image {
+            max-width: 300px;
+            max-height: 250px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            object-fit: cover;
+        }
+
+        .page-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: justify;
+        }
+
+        .page-title {
+            font-size: 26px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .nav-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .page-counter {
+            background: #fff;
+            border: 2px solid #667eea;
+            border-radius: 20px;
+            padding: 8px 16px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Animaciones de transición */
+        .page-content {
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 0.5s ease-in-out;
+        }
+
+        .page-content.slide-out-left {
+            opacity: 0;
+            transform: translateX(-100px);
+        }
+
+        .page-content.slide-out-right {
+            opacity: 0;
+            transform: translateX(100px);
+        }
+
+        .page-content.slide-in-left {
+            opacity: 0;
+            transform: translateX(-100px);
+        }
+
+        .page-content.slide-in-right {
+            opacity: 0;
+            transform: translateX(100px);
+        }
+
+        /* Efectos especiales para páginas especiales */
+        .heart-animation {
+            position: absolute;
+            font-size: 20px;
+            color: #ff6b6b;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes heartFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+
+        .floating-heart {
+            animation: heartFloat 3s ease-out forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .book-container {
+                width: 95%;
+                height: 90%;
+            }
+            
+            .page-content {
+                padding: 20px;
+            }
+            
+            .page-image {
+                max-width: 250px;
+                max-height: 200px;
+            }
+            
+            .page-text {
+                font-size: 16px;
+            }
+            
+            .navigation {
+                padding: 15px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="book-container">
+        <div class="book-header">
+            💕 Nuestra Historia de Amor 💕
+        </div>
+        
+        <div class="page-content" id="pageContent">
+            <h2 class="page-title" id="pageTitle">Bienvenidos a Nuestra Historia</h2>
+            <img class="page-image" id="pageImage" src="Imagenes/I1.jfif" alt="Nuestra foto">
+            <p class="page-text" id="pageText">
+                Esta es la historia de Mia y Galy, dos personas que se encontraron y crearon algo hermoso juntos. 
+                Acompáñanos en este viaje lleno de momentos especiales, risas, aventuras, dramas, tragedias y mucho amor.
+            </p>
+        </div>
+        
+        <div class="navigation">
+            <button class="nav-button" id="prevBtn" onclick="previousPage()">← Anterior</button>
+            <div class="page-counter">
+                <span id="currentPage">1</span> / <span id="totalPages">7</span>
+            </div>
+            <button class="nav-button" id="nextBtn" onclick="nextPage()">Siguiente →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentPageIndex = 0;
+        
+        // Aquí puedes agregar todas las páginas de tu historia
+        const pages = [
+            {
+    title: "El Comienzo de Todo",
+    image: "Imagenes/I1.jfif",
+    text: "Todo comenzó cuando nuestros caminos se cruzaron. Era un día como cualquier otro. Un simple hola abrió una infinidad de posibilidades en nuestro futuro. Tú, una chica muy bella, y un chico tonto."
+},
+{
+    title: "Nuestro Primer Encuentro",
+    image: "Imagenes/I2.jfif",
+    text: "¿Recuerdas la primera vez que nos vimos? Yo estaba tan nervioso. Nunca antes había conocido a alguien así de esa manera, no me dejabas ni verte jajaja, fue muy gracioso."
+},
+{
+    title: "Los Primeros Momentos Juntos",
+    image: "Imagenes/I3.jfif",
+    text: "Aparte de los momentos que compartimos de forma online, agradezco que me acompañaras al parque que frecuentaba cuando salía de la universidad. Me dio risa que tomaste foto con filtro de perrito xd."
+},
+{
+    title: "Problemas",
+    image: "Imagenes/gojo1.jpg",
+    text: "La vez que te desesperaste y me metiste a la fuerza a encerrarme en un cuarto, diciendo que me van a pegar xd."
+},
+{
+    title: "Anécdotas Malas y Buenas",
+    image: "Imagenes/I4.jfif",
+    text: "Las malas decisiones que tomamos nos llevaron a estar en el problema en el que nos encontramos. Sé que todo lo hice mal, no me justifico. En serio, merezco que tu familia me odie. Se supone que soy mayor y actué de una manera tan mala, que tal vez todo esto afecte al futuro que alguna vez deseamos. Fue la primera vez que te vi llorar y literal casi llegas a separarte de tu familia que tanto quieres."
+},
+{
+    title: "Anécdotas Malas y Buenas 2",
+    image: "Imagenes/I5.jfif",
+    text: "Yo te dije que te apoyaría en la decisión que tomes y me alegro que prefirieras a tu familia antes que a mí. Muy bien eh. Tal vez aún hablemos, pero como me comentaste, yo sé que tus padres te condicionaron a que ya no tengas comunicación conmigo. Pero yo te dije que estaré para usted hasta que me digas que ya no, y como me dijiste una vez, tal vez en el futuro nos encontremos nuevamente."
+},
+{
+    title: "Anécdotas Malas y Buenas 3",
+    image: "Imagenes/SNOOPY.jpg",
+    text: "Jueves 28, pues empezamos a salir pese a lo que pasó. Ajajaja a veces me digo: tan rápido caí en tus engaños. Las flores que pedí me dijeron en una semana ajaja, tal vez uno de estos días te llegue y compense un poco lo malo que pasó. En serio, todo mal nos sale, pero no olvides que yo te aprecio mucho y estaré para usted en lo que necesites."
+},
+{
+    title: "",
+    image: "Imagenes/I6.jfif",
+    text: "."
+}
+
+        ];
+
+        function updatePage() {
+            const page = pages[currentPageIndex];
+            const pageContent = document.getElementById('pageContent');
+            
+            // Efecto de transición
+            pageContent.style.opacity = '0';
+            
+            setTimeout(() => {
+                document.getElementById('pageTitle').textContent = page.title;
+                document.getElementById('pageImage').src = page.image;
+                document.getElementById('pageText').textContent = page.text;
+                document.getElementById('currentPage').textContent = currentPageIndex + 1;
+                
+                pageContent.style.opacity = '1';
+                
+                // Actualizar botones
+                document.getElementById('prevBtn').disabled = currentPageIndex === 0;
+                document.getElementById('nextBtn').disabled = currentPageIndex === pages.length - 1;
+                
+                // Efecto especial en la última página
+                if (currentPageIndex === pages.length - 1) {
+                    createHeartAnimation();
+                }
+            }, 250);
+        }
+
+        function nextPage() {
+            if (currentPageIndex < pages.length - 1) {
+                currentPageIndex++;
+                updatePage();
+            }
+        }
+
+        function previousPage() {
+            if (currentPageIndex > 0) {
+                currentPageIndex--;
+                updatePage();
+            }
+        }
+
+        function createHeartAnimation() {
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = '💖';
+                    heart.className = 'heart-animation floating-heart';
+                    heart.style.position = 'absolute';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.top = '100%';
+                    heart.style.zIndex = '1000';
+                    
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 3000);
+                }, i * 300);
+            }
+        }
+
+        // Controles de teclado
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') previousPage();
+            if (e.key === 'ArrowRight') nextPage();
+        });
+
+        // Inicializar
+        document.getElementById('totalPages').textContent = pages.length;
+        updatePage();
+    </script>
+</body>
+</html>
