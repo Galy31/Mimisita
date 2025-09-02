@@ -2,320 +2,809 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nuestra Historia - Mia y Galy</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(135deg, #000000 0%, #ff0000 100%);
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+        
+        * {
             margin: 0;
             padding: 0;
-            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(45deg, #555580, #000511, #f72424, #2e0d12);
+            background-size: 400% 400%;
+            animation: gradientFlow 15s ease infinite;
+            min-height: 100vh;
+            width: 100vw;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            padding: 15px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Partículas flotantes de fondo */
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
         }
 
         .book-container {
-            width: 90%;
-            max-width: 800px;
-            height: 80%;
-            max-height: 600px;
-            background: #fff;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 900px;
+            height: 95vh;
+            min-height: 600px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
             position: relative;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .book-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
         .book-header {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            background: linear-gradient(135deg, rgba(233, 69, 96, 0.9), rgba(255, 107, 107, 0.9));
+            backdrop-filter: blur(10px);
             color: white;
             text-align: center;
-            padding: 15px;
-            font-size: 24px;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            padding: clamp(15px, 4vw, 25px);
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(20px, 6vw, 32px);
+            font-weight: 700;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
 
         .page-content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
-            padding: 30px;
+            padding: clamp(20px, 5vw, 40px);
             text-align: center;
             position: relative;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(233, 69, 96, 0.5) transparent;
+        }
+
+        .page-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .page-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .page-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #e94560, #ff6b6b);
+            border-radius: 10px;
+        }
+
+        .page-number {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(233, 69, 96, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            padding: 5px 12px;
+            border-radius: 15px;
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .page-image-container {
+            position: relative;
+            margin-bottom: clamp(20px, 4vw, 30px);
+            transition: all 0.5s ease;
         }
 
         .page-image {
-            max-width: 300px;
-            max-height: 250px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            margin-bottom: 20px;
+            width: 100%;
+            max-width: clamp(250px, 70vw, 400px);
+            height: auto;
+            max-height: 40vh;
+            border-radius: 20px;
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
             object-fit: cover;
+            filter: brightness(1.1) contrast(1.1) saturate(1.2);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page-image:hover {
+            transform: scale(1.05) rotateY(5deg);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(233, 69, 96, 0.3);
+        }
+
+        .page-image-container::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(45deg, #e94560, #ff6b6b, #764ba2, #667eea);
+            border-radius: 25px;
+            z-index: -1;
+            opacity: 0.7;
+            filter: blur(10px);
         }
 
         .page-text {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
+            font-size: clamp(15px, 4vw, 19px);
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.95);
+            max-width: 100%;
             margin: 0 auto;
             text-align: justify;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: clamp(20px, 4vw, 30px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.3px;
+            position: relative;
+        }
+
+        .page-text::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-size: 60px;
+            color: rgba(233, 69, 96, 0.3);
+            font-family: 'Playfair Display', serif;
+            line-height: 1;
         }
 
         .page-title {
-            font-size: 26px;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-weight: bold;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(22px, 6vw, 36px);
+            color: white;
+            margin-bottom: clamp(15px, 3vw, 25px);
+            font-weight: 700;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            background: linear-gradient(135deg, #ff6b6b, #e94560, #764ba2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            border-radius: 2px;
+            box-shadow: 0 2px 10px rgba(233, 69, 96, 0.5);
         }
 
         .navigation {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 30px;
-            background: #f8f9fa;
-            border-top: 2px solid #e9ecef;
+            padding: clamp(15px, 4vw, 25px);
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
         }
 
         .nav-button {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #e94560, #ff6b6b);
             color: white;
             border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-size: 16px;
+            padding: clamp(12px, 3vw, 18px) clamp(20px, 5vw, 35px);
+            border-radius: 50px;
+            font-size: clamp(14px, 3.5vw, 18px);
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 8px 25px rgba(233, 69, 96, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            min-height: 50px;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s;
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
         }
 
         .nav-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 
+                0 15px 40px rgba(233, 69, 96, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-button:active {
+            transform: translateY(-1px) scale(1.02);
         }
 
         .nav-button:disabled {
-            background: #ccc;
+            background: rgba(255, 255, 255, 0.1);
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
+            opacity: 0.5;
         }
 
         .page-counter {
-            background: #fff;
-            border: 2px solid #667eea;
-            border-radius: 20px;
-            padding: 8px 16px;
-            color: #667eea;
-            font-weight: bold;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(233, 69, 96, 0.5);
+            border-radius: 30px;
+            padding: clamp(8px, 2vw, 12px) clamp(16px, 4vw, 24px);
+            color: white;
+            font-weight: 600;
+            font-size: clamp(14px, 3.5vw, 18px);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Animaciones de transición */
+        .page-counter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(233, 69, 96, 0.1), rgba(255, 107, 107, 0.1));
+            z-index: -1;
+        }
+
+        /* Animaciones de transición más espectaculares */
         .page-content {
             opacity: 1;
-            transform: translateX(0);
-            transition: all 0.5s ease-in-out;
+            transform: translateX(0) rotateY(0deg) scale(1);
+            transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         .page-content.slide-out-left {
             opacity: 0;
-            transform: translateX(-100px);
+            transform: translateX(-200px) rotateY(-15deg) scale(0.8);
         }
 
         .page-content.slide-out-right {
             opacity: 0;
-            transform: translateX(100px);
+            transform: translateX(200px) rotateY(15deg) scale(0.8);
         }
 
         .page-content.slide-in-left {
             opacity: 0;
-            transform: translateX(-100px);
+            transform: translateX(-200px) rotateY(-15deg) scale(0.8);
         }
 
         .page-content.slide-in-right {
             opacity: 0;
-            transform: translateX(100px);
+            transform: translateX(200px) rotateY(15deg) scale(0.8);
         }
 
-        /* Efectos especiales para páginas especiales */
+        /* Efectos especiales mejorados */
         .heart-animation {
-            position: absolute;
-            font-size: 20px;
+            position: fixed;
+            font-size: clamp(20px, 4vw, 30px);
             color: #ff6b6b;
             opacity: 0;
             pointer-events: none;
+            z-index: 1000;
+            filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.8));
         }
 
         @keyframes heartFloat {
             0% {
                 opacity: 1;
-                transform: translateY(0) scale(1);
+                transform: translateY(0) scale(1) rotate(0deg);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateY(-50px) scale(1.5) rotate(180deg);
             }
             100% {
                 opacity: 0;
-                transform: translateY(-100px) scale(1.5);
+                transform: translateY(-150px) scale(2) rotate(360deg);
             }
         }
 
         .floating-heart {
-            animation: heartFloat 3s ease-out forwards;
+            animation: heartFloat 4s ease-out forwards;
         }
 
-        /* Responsive */
+        /* Efecto de loading para imágenes */
+        .page-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            background-size: 200% 200%;
+            animation: imageShimmer 2s infinite;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .loading .page-image-container::after {
+            opacity: 1;
+        }
+
+        @keyframes imageShimmer {
+            0% { background-position: -200% -200%; }
+            100% { background-position: 200% 200%; }
+        }
+
+        /* Efectos de texto dinámicos */
+        .page-text.typing {
+            overflow: hidden;
+            border-right: 2px solid rgba(233, 69, 96, 0.8);
+            white-space: nowrap;
+            animation: typing 2s steps(40, end), blink-caret 1s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: rgba(233, 69, 96, 0.8); }
+        }
+
+        /* Glitch effect para títulos especiales */
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            animation: glitch-1 0.5s infinite;
+            color: #e94560;
+            z-index: -1;
+        }
+
+        .glitch::after {
+            animation: glitch-2 0.5s infinite;
+            color: #667eea;
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(2px, 2px); }
+            40% { transform: translate(2px, -2px); }
+            60% { transform: translate(-2px, 2px); }
+            80% { transform: translate(-2px, -2px); }
+        }
+
+        /* Media Queries mejoradas */
         @media (max-width: 768px) {
             .book-container {
-                width: 95%;
-                height: 90%;
+                width: 98%;
+                height: 98vh;
+                margin: 5px;
+                border-radius: 20px;
             }
             
             .page-content {
-                padding: 20px;
+                padding: 20px 15px;
             }
             
             .page-image {
-                max-width: 250px;
-                max-height: 200px;
+                max-width: 90%;
+                max-height: 35vh;
             }
             
             .page-text {
+                padding: 20px 15px;
                 font-size: 16px;
             }
             
             .navigation {
+                padding: 15px;
+            }
+            
+            .nav-button {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .book-container {
+                height: 100vh;
+                border-radius: 0;
+            }
+            
+            .book-header {
+                padding: 15px 10px;
+            }
+            
+            .page-text::before {
+                display: none;
+            }
+        }
+
+        /* Modo landscape para móviles */
+        @media (max-width: 896px) and (orientation: landscape) {
+            .book-container {
+                height: 98vh;
+            }
+            
+            .page-content {
+                flex-direction: row;
+                text-align: left;
                 padding: 15px 20px;
+            }
+            
+            .page-image {
+                width: 45%;
+                max-width: 300px;
+                margin-right: 20px;
+                margin-bottom: 0;
+            }
+            
+            .content-text {
+                flex: 1;
+            }
+        }
+
+        /* Dark mode automático para dispositivos que lo soporten */
+        @media (prefers-color-scheme: dark) {
+            .page-text {
+                color: rgba(255, 255, 255, 0.98);
+            }
+        }
+
+        /* Animación de entrada inicial */
+        .book-container.entering {
+            animation: bookEntrance 1s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+        }
+
+        @keyframes bookEntrance {
+            0% {
+                opacity: 0;
+                transform: perspective(1000px) rotateY(-30deg) translateY(50px) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: perspective(1000px) rotateY(0deg) translateY(0) scale(1);
+            }
+        }
+
+        /* Efecto de nieve/partículas románticas */
+        .romantic-particle {
+            position: fixed;
+            color: rgba(255, 182, 193, 0.6);
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1;
+            animation: romanticFall 8s linear infinite;
+        }
+
+        @keyframes romanticFall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
             }
         }
     </style>
 </head>
 <body>
-    <div class="book-container">
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="book-container entering" id="bookContainer">
         <div class="book-header">
-            💕 Nuestra Historia de Amor 💕
+            <i class="fas fa-heart" style="margin-right: 10px; animation: pulse 2s infinite;"></i>
+            Nuestra Historia de Amor
+            <i class="fas fa-heart" style="margin-left: 10px; animation: pulse 2s infinite;"></i>
         </div>
         
         <div class="page-content" id="pageContent">
+            <div class="page-number" id="pageNumber">Página 1</div>
             <h2 class="page-title" id="pageTitle">Bienvenidos a Nuestra Historia</h2>
-            <img class="page-image" id="pageImage" src="Imagenes/I1.jfif" alt="Nuestra foto">
-            <p class="page-text" id="pageText">
-                Esta es la historia de Mia y Galy, dos personas que se encontraron y crearon algo hermoso juntos. 
-                Acompáñanos en este viaje lleno de momentos especiales, risas, aventuras, dramas, tragedias y mucho amor.
-            </p>
+            <div class="page-image-container">
+                <img class="page-image" id="pageImage" src="Imagenes/I1.jfif" alt="Nuestra foto" loading="lazy">
+            </div>
+            <div class="content-text">
+                <p class="page-text" id="pageText">
+                    Esta es la historia de Mia y Galy, dos personas que se encontraron y crearon algo hermoso juntos. 
+                    Acompáñanos en este viaje lleno de momentos especiales, risas, aventuras, dramas, tragedias y mucho amor.
+                </p>
+            </div>
         </div>
         
         <div class="navigation">
-            <button class="nav-button" id="prevBtn" onclick="previousPage()">← Anterior</button>
+            <button class="nav-button" id="prevBtn" onclick="previousPage()">
+                <i class="fas fa-chevron-left"></i> Anterior
+            </button>
             <div class="page-counter">
-                <span id="currentPage">1</span> / <span id="totalPages">7</span>
+                <span id="currentPage">1</span> / <span id="totalPages">8</span>
             </div>
-            <button class="nav-button" id="nextBtn" onclick="nextPage()">Siguiente →</button>
+            <button class="nav-button" id="nextBtn" onclick="nextPage()">
+                Siguiente <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
     </div>
 
     <script>
         let currentPageIndex = 0;
+        let isTransitioning = false;
         
-        // Aquí puedes agregar todas las páginas de tu historia
         const pages = [
             {
-    title: "El Comienzo de Todo",
-    image: "Imagenes/I1.jfif",
-    text: "Todo comenzó cuando nuestros caminos se cruzaron. Era un día como cualquier otro. Un simple hola abrió una infinidad de posibilidades en nuestro futuro. Tú, una chica muy bella, y un chico tonto."
-},
-{
-    title: "Nuestro Primer Encuentro",
-    image: "Imagenes/I2.jfif",
-    text: "¿Recuerdas la primera vez que nos vimos? Yo estaba tan nervioso. Nunca antes había conocido a alguien así de esa manera, no me dejabas ni verte jajaja, fue muy gracioso."
-},
-{
-    title: "Los Primeros Momentos Juntos",
-    image: "Imagenes/I3.jfif",
-    text: "Aparte de los momentos que compartimos de forma online, agradezco que me acompañaras al parque que frecuentaba cuando salía de la universidad. Me dio risa que tomaste foto con filtro de perrito xd."
-},
-{
-    title: "Problemas",
-    image: "Imagenes/gojo1.jpg",
-    text: "La vez que te desesperaste y me metiste a la fuerza a encerrarme en un cuarto, diciendo que me van a pegar xd."
-},
-{
-    title: "Anécdotas Malas y Buenas",
-    image: "Imagenes/I4.jfif",
-    text: "Las malas decisiones que tomamos nos llevaron a estar en el problema en el que nos encontramos. Sé que todo lo hice mal, no me justifico. En serio, merezco que tu familia me odie. Se supone que soy mayor y actué de una manera tan mala, que tal vez todo esto afecte al futuro que alguna vez deseamos. Fue la primera vez que te vi llorar y literal casi llegas a separarte de tu familia que tanto quieres."
-},
-{
-    title: "Anécdotas Malas y Buenas 2",
-    image: "Imagenes/I5.jfif",
-    text: "Yo te dije que te apoyaría en la decisión que tomes y me alegro que prefirieras a tu familia antes que a mí. Muy bien eh. Tal vez aún hablemos, pero como me comentaste, yo sé que tus padres te condicionaron a que ya no tengas comunicación conmigo. Pero yo te dije que estaré para usted hasta que me digas que ya no, y como me dijiste una vez, tal vez en el futuro nos encontremos nuevamente."
-},
-{
-    title: "Anécdotas Malas y Buenas 3",
-    image: "Imagenes/SNOOPY.jpg",
-    text: "Jueves 28, pues empezamos a salir pese a lo que pasó. Ajajaja a veces me digo: tan rápido caí en tus engaños. Las flores que pedí me dijeron en una semana ajaja, tal vez uno de estos días te llegue y compense un poco lo malo que pasó. En serio, todo mal nos sale, pero no olvides que yo te aprecio mucho y estaré para usted en lo que necesites."
-},
-{
-    title: "",
-    image: "Imagenes/I6.jfif",
-    text: "."
-}
-
+                title: "El Comienzo de Todo",
+                image: "Imagenes/I1.jfif",
+                text: "Todo comenzó cuando nuestros caminos se cruzaron. Era un día como cualquier otro. Un simple hola abrió una infinidad de posibilidades en nuestro futuro. Tú, una chica muy bella, y un chico tonto.",
+                special: false
+            },
+            {
+                title: "Nuestro Primer Encuentro",
+                image: "Imagenes/I2.jfif",
+                text: "¿Recuerdas la primera vez que nos vimos? Yo estaba tan nervioso. Nunca antes había conocido a alguien así de esa manera, no me dejabas ni verte jajaja, fue muy gracioso.",
+                special: false
+            },
+            {
+                title: "Los Primeros Momentos Juntos",
+                image: "Imagenes/I3.jfif",
+                text: "Aparte de los momentos que compartimos de forma online, agradezco que me acompañaras al parque que frecuentaba cuando salía de la universidad. Me dio risa que tomaste foto con filtro de perrito xd.",
+                special: false
+            },
+            {
+                title: "Problemas",
+                image: "Imagenes/gojo1.jpg",
+                text: "La vez que te desesperaste y me metiste a la fuerza a encerrarme en un cuarto, diciendo que me van a pegar xd.",
+                special: "glitch"
+            },
+            {
+                title: "Anécdotas Malas y Buenas",
+                image: "Imagenes/I4.jfif",
+                text: "Las malas decisiones que tomamos nos llevaron a estar en el problema en el que nos encontramos. Sé que todo lo hice mal, no me justifico. En serio, merezco que tu familia me odie. Se supone que soy mayor y actué de una manera tan mala, que tal vez todo esto afecte al futuro que alguna vez deseamos. Fue la primera vez que te vi llorar y literal casi llegas a separarte de tu familia que tanto quieres.",
+                special: false
+            },
+            {
+                title: "Anécdotas Malas y Buenas 2",
+                image: "Imagenes/I5.jfif",
+                text: "Yo te dije que te apoyaría en la decisión que tomes y me alegro que prefirieras a tu familia antes que a mí. Muy bien eh. Tal vez aún hablemos, pero como me comentaste, yo sé que tus padres te condicionaron a que ya no tengas comunicación conmigo. Pero yo te dije que estaré para usted hasta que me digas que ya no, y como me dijiste una vez, tal vez en el futuro nos encontremos nuevamente.",
+                special: false
+            },
+            {
+                title: "Anécdotas Malas y Buenas 3",
+                image: "Imagenes/SNOOPY.jpg",
+                text: "Jueves 28, pues empezamos a salir pese a lo que pasó. Ajajaja a veces me digo: tan rápido caí en tus engaños. Las flores que pedí me dijeron en una semana ajaja, tal vez uno de estos días te llegue y compense un poco lo malo que pasó. En serio, todo mal nos sale, pero no olvides que yo te aprecio mucho y estaré para usted en lo que necesites.",
+                special: false
+            },
+            {
+                title: "Nuestro Futuro Juntos",
+                image: "Imagenes/I6.jfif",
+                text: "A pesar de todos los obstáculos, seguimos aquí. Cada día escribimos una nueva página de nuestra historia, aprendiendo y creciendo",
+                special: "hearts"
+            }
         ];
 
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 6 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        function createRomanticParticles() {
+            const particles = ['💕', '💖', '✨', '💫', '🌟', '💝', '🦋'];
+            
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'romantic-particle';
+                    particle.innerHTML = particles[Math.floor(Math.random() * particles.length)];
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 2 + 's';
+                    document.body.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 8000);
+                }, i * 200);
+            }
+        }
+
         function updatePage() {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            
             const page = pages[currentPageIndex];
             const pageContent = document.getElementById('pageContent');
             
-            // Efecto de transición
+            // Efecto de transición más dramático
             pageContent.style.opacity = '0';
+            pageContent.style.transform = 'translateX(-50px) rotateY(-10deg) scale(0.95)';
             
             setTimeout(() => {
-                document.getElementById('pageTitle').textContent = page.title;
-                document.getElementById('pageImage').src = page.image;
-                document.getElementById('pageText').textContent = page.text;
-                document.getElementById('currentPage').textContent = currentPageIndex + 1;
+                const titleElement = document.getElementById('pageTitle');
+                const imageElement = document.getElementById('pageImage');
+                const textElement = document.getElementById('pageText');
                 
+                // Actualizar contenido
+                titleElement.textContent = page.title;
+                imageElement.src = page.image;
+                textElement.textContent = page.text;
+                
+                // Efectos especiales según la página
+                titleElement.className = 'page-title';
+                if (page.special === 'glitch') {
+                    titleElement.className += ' glitch';
+                    titleElement.setAttribute('data-text', page.title);
+                }
+                
+                document.getElementById('currentPage').textContent = currentPageIndex + 1;
+                document.getElementById('pageNumber').textContent = `Página ${currentPageIndex + 1}`;
+                
+                // Restaurar página con animación
                 pageContent.style.opacity = '1';
+                pageContent.style.transform = 'translateX(0) rotateY(0deg) scale(1)';
                 
                 // Actualizar botones
                 document.getElementById('prevBtn').disabled = currentPageIndex === 0;
                 document.getElementById('nextBtn').disabled = currentPageIndex === pages.length - 1;
                 
-                // Efecto especial en la última página
-                if (currentPageIndex === pages.length - 1) {
+                // Efectos especiales según la página
+                if (page.special === 'hearts') {
                     createHeartAnimation();
+                    createRomanticParticles();
                 }
-            }, 250);
+                
+                // Scroll al top
+                pageContent.scrollTop = 0;
+                isTransitioning = false;
+            }, 300);
         }
 
         function nextPage() {
-            if (currentPageIndex < pages.length - 1) {
+            if (currentPageIndex < pages.length - 1 && !isTransitioning) {
                 currentPageIndex++;
                 updatePage();
+                
+                // Vibración en móviles si está disponible
+                if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
             }
         }
 
         function previousPage() {
-            if (currentPageIndex > 0) {
+            if (currentPageIndex > 0 && !isTransitioning) {
                 currentPageIndex--;
                 updatePage();
+                
+                if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
             }
         }
 
         function createHeartAnimation() {
-            for (let i = 0; i < 10; i++) {
+            const hearts = ['💕', '💖', '💗', '💘', '💝', '💞', '💟', '❤️', '🧡', '💛', '💚', '💙', '💜', '🤍', '🖤'];
+            
+            for (let i = 0; i < 25; i++) {
                 setTimeout(() => {
                     const heart = document.createElement('div');
-                    heart.innerHTML = '💖';
+                    heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
                     heart.className = 'heart-animation floating-heart';
-                    heart.style.position = 'absolute';
+                    heart.style.position = 'fixed';
                     heart.style.left = Math.random() * 100 + '%';
                     heart.style.top = '100%';
                     heart.style.zIndex = '1000';
@@ -324,20 +813,232 @@
                     
                     setTimeout(() => {
                         heart.remove();
-                    }, 3000);
-                }, i * 300);
+                    }, 4000);
+                }, i * 150);
             }
         }
 
-        // Controles de teclado
+        // Controles de teclado mejorados
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowLeft') previousPage();
-            if (e.key === 'ArrowRight') nextPage();
+            switch(e.key) {
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    e.preventDefault();
+                    previousPage();
+                    break;
+                case 'ArrowRight':
+                case 'ArrowDown':
+                case ' ':
+                    e.preventDefault();
+                    nextPage();
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    currentPageIndex = 0;
+                    updatePage();
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    currentPageIndex = pages.length - 1;
+                    updatePage();
+                    break;
+            }
         });
 
-        // Inicializar
-        document.getElementById('totalPages').textContent = pages.length;
-        updatePage();
+        // Swipe gestures para móviles
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            
+            // Solo procesar si el swipe horizontal es mayor que el vertical
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                if (deltaX > 0) {
+                    previousPage(); // Swipe derecha = página anterior
+                } else {
+                    nextPage(); // Swipe izquierda = página siguiente
+                }
+            }
+        }
+
+        // Prevenir zoom en doble tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Efecto de carga de imagen mejorado
+        function handleImageLoad() {
+            const images = document.querySelectorAll('.page-image');
+            images.forEach(img => {
+                img.addEventListener('load', function() {
+                    this.parentElement.classList.remove('loading');
+                });
+                
+                img.addEventListener('loadstart', function() {
+                    this.parentElement.classList.add('loading');
+                });
+            });
+        }
+
+        // Auto-play opcional (descomenta para activar)
+        /*
+        function autoPlay() {
+            setInterval(() => {
+                if (currentPageIndex < pages.length - 1) {
+                    nextPage();
+                } else {
+                    currentPageIndex = 0;
+                    updatePage();
+                }
+            }, 10000); // 10 segundos por página
+        }
+        */
+
+        // Easter egg: konami code
+        let konamiCode = [];
+        const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // ↑↑↓↓←→←→BA
+
+        document.addEventListener('keydown', function(e) {
+            konamiCode.push(e.keyCode);
+            if (konamiCode.length > konami.length) {
+                konamiCode.shift();
+            }
+            
+            if (JSON.stringify(konamiCode) === JSON.stringify(konami)) {
+                // Easter egg activado
+                createMassiveHeartExplosion();
+                konamiCode = [];
+            }
+        });
+
+        function createMassiveHeartExplosion() {
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    createHeartAnimation();
+                }, i * 50);
+            }
+        }
+
+        // Detección de batería baja (para reducir animaciones)
+        if ('getBattery' in navigator) {
+            navigator.getBattery().then(function(battery) {
+                if (battery.level < 0.2) {
+                    document.body.classList.add('low-battery');
+                    // Reducir animaciones para ahorrar batería
+                }
+            });
+        }
+
+        // Inicialización mejorada
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            handleImageLoad();
+            document.getElementById('totalPages').textContent = pages.length;
+            updatePage();
+            
+            // Quitar la clase de entrada después de la animación
+            setTimeout(() => {
+                document.getElementById('bookContainer').classList.remove('entering');
+            }, 1000);
+            
+            // Precargar próximas imágenes
+            if (pages.length > 1) {
+                const nextImg = new Image();
+                nextImg.src = pages[1].image;
+            }
+        });
+
+        // Service Worker para cache (opcional)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('SW registrado');
+                    })
+                    .catch(function(registrationError) {
+                        console.log('SW falló');
+                    });
+            });
+        }
+
+        // Compartir nativo
+        function shareStory() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Nuestra Historia de Amor',
+                    text: 'Mira nuestra hermosa historia de amor',
+                    url: window.location.href
+                });
+            }
+        }
+
+        // Modo fullscreen
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Funciones de accesibilidad
+        function increaseTextSize() {
+            const textElements = document.querySelectorAll('.page-text');
+            textElements.forEach(el => {
+                const currentSize = parseInt(window.getComputedStyle(el).fontSize);
+                el.style.fontSize = (currentSize + 2) + 'px';
+            });
+        }
+
+        function decreaseTextSize() {
+            const textElements = document.querySelectorAll('.page-text');
+            textElements.forEach(el => {
+                const currentSize = parseInt(window.getComputedStyle(el).fontSize);
+                if (currentSize > 12) {
+                    el.style.fontSize = (currentSize - 2) + 'px';
+                }
+            });
+        }
+
+        // Atajos de teclado adicionales
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case '+':
+                        e.preventDefault();
+                        increaseTextSize();
+                        break;
+                    case '-':
+                        e.preventDefault();
+                        decreaseTextSize();
+                        break;
+                    case 'f':
+                        e.preventDefault();
+                        toggleFullscreen();
+                        break;
+                }
+            }
+        });
     </script>
 </body>
 </html>
